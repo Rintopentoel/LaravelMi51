@@ -12,7 +12,12 @@ class RuangController extends Controller
      */
     public function index()
     {
-        //
+       // panggil model ruang
+        $hasil = Ruang::all();
+       // cek isi variabel $hasil
+        //dd($hasil);
+        return view('ruang.index')->with('hasil', $hasil);
+
     }
 
     /**

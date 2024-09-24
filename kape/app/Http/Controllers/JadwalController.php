@@ -12,7 +12,11 @@ class JadwalController extends Controller
      */
     public function index()
     {
-        //
+        // panggil model jadwal
+        $hasil = jadwal::all();
+       // cek isi variabel $hasil
+        //dd($hasil);
+        return view('jadwal.index')->with('hasil', $hasil);
     }
 
     /**
