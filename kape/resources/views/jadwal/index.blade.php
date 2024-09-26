@@ -1,3 +1,6 @@
+@extends('layouts.main')
+
+@section('content')
 <table class="table">
     <tr>
         <th>Ruang</th>
@@ -10,7 +13,7 @@
     <!-- sesuaikan dengan kolom masing-masing -->
      <tr>
         <td>
-            {{ $row['ruang_id'] }}
+            {{ $row['ruang']['nama_ruang'] }}
         </td>
         <td>
             {{ $row['tanggal'] }}
@@ -21,5 +24,7 @@
         <td>
             {{ $row['status'] }}  
         </td>
-    </tr>       
-@endforeach
+    </tr> 
+    @endforeach 
+</table>     
+@endsection
