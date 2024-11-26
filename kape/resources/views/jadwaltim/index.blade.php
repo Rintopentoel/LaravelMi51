@@ -1,3 +1,8 @@
+@extends('layouts.main')
+
+@section('content')
+<h2>JadwalTim</h2>
+<a href="{{ route('jadwaltim.create') }}" class="btn btn-primary"> Tambah </a>
 <table class="table">
     <tr>
         <th>Jadwal Id</th>
@@ -15,3 +20,5 @@
         </td>
     </tr>       
 @endforeach
+</table>
+@endsection

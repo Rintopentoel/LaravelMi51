@@ -32,7 +32,19 @@ class JadwalTimController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->validate([
+            "tanggal" => "required",
+            "tanggal_servis_selanjutnya" => "required",
+            "ruang_id" => "required",
+            "user_id" => "required",
+            "status" => "required",
+        ]);
+
+        // simpan ke tabel ruang
+        Jadwaltim::create($input);
+
+        // redirect ke route jadwal.index
+        return redirect()->route('jadwal_tim.index');
     }
 
     /**
