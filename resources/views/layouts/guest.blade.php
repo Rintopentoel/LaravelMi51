@@ -18,7 +18,7 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <div>
                 <a href="/">
-                 <img src="{{ url('assets/img/logo.png') }}" alt="" srcset="" width="250">
+                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_9Ut09gVWObq4JTkxmdo2UOZalhb3O12r3w&s" alt="" srcset="" width="250">
                 </a>
             </div>
 
