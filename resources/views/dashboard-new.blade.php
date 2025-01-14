@@ -19,7 +19,7 @@
             <div class="card-header">Informasi Jadwal</div>
             <div class="card-body">
                 <h5 class="card-title">Total Jadwal</h5>
-                <p class="card-text">${{ number_format(count($jadwal), 0, ',', '.') }}</p>
+                <p class="card-text">{{ number_format(count($jadwal), 0, ',', '.') }}</p>
             </div>
             <div class="card-footer">Jumlah total Jadwal di Sistem</div>
         </div>
