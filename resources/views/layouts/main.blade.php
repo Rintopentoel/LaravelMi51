@@ -67,10 +67,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Jadwal
                             </a>
-                            <a class="nav-link" href="{{ url('user') }}">
+                            {{-- <a class="nav-link" href="{{ url('user') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div>
                                 User
-                            </a>
+                            </a> --}}
                             {{-- <a class="nav-link" href="{{ url('jadwaltim') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 JadwalTim
