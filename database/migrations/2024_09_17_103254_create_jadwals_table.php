@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('jadwals', function (Blueprint $table) {
             $table->id();
             $table->date('tanggal');
+            $table->unsignedBigInteger('ruang_id');
+            $table->foreign('ruang_id')->references('id')->on('ruangs');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->date('tanggal_servis_selanjutnya');

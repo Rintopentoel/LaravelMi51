@@ -33,7 +33,18 @@
                         <li><a class="dropdown-item" href="#!">Settings</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Logout</a></li>
+                        <li>
+                        <!-- Authentication -->
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+
+                            <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Log Out') }}
+                            </x-dropdown-link>
+                        </form>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -55,6 +66,10 @@
                             <a class="nav-link" href="{{ url('jadwal') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Jadwal
+                            </a>
+                            <a class="nav-link" href="{{ url('user') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div>
+                                User
                             </a>
                             {{-- <a class="nav-link" href="{{ url('jadwaltim') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
