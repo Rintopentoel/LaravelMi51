@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -7,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Tables - SB Admin</title>
+        <title>MDP Monitoring</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="{{ url('css/styles.css') }}" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -59,18 +58,30 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
-                            <a class="nav-link" href="{{ url('ruang') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Ruang
-                            </a>
-                            <a class="nav-link" href="{{ url('jadwal') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Jadwal
-                            </a>
-                            {{-- <a class="nav-link" href="{{ url('user') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div>
-                                User
-                            </a> --}}
+                            @if(auth()->user()->role === 'spv')
+                                <a class="nav-link" href="{{ url('gedung') }}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                    Gedung
+                                </a>
+                                <a class="nav-link" href="{{ url('permintaan') }}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                    Permintaan
+                                </a>
+                                <a class="nav-link" href="{{ url('user') }}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-user-alt"></i></div>
+                                    User
+                                </a>
+                            @elseif(auth()->user()->role === 'teknisi')
+                                <a class="nav-link" href="{{ url('permintaan') }}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                    Permintaan
+                                </a>
+                            @else
+                                <a class="nav-link" href="{{ url('permintaan') }}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                    Permintaan
+                                </a>
+                            @endif
                             {{-- <a class="nav-link" href="{{ url('jadwaltim') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 JadwalTim

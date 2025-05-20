@@ -45,4 +45,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Relasi ke model Gedung.
+     */
+    public function gedung()
+    {
+        return $this->belongsTo(Gedung::class, 'gedung_id');
+    }
+
 }

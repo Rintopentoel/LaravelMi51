@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Gedung;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -11,14 +12,15 @@ class UserController extends Controller
     // Menampilkan daftar pengguna
     public function index()
     {
-        $users = User::all(); // Mengambil semua data user
+        $users = User::with('gedung')->get(); // Relasi ke gedung
         return view('user.index', compact('users'));
     }
 
     // Menampilkan formulir untuk membuat pengguna baru
     public function create()
     {
-        return view('user.create');
+        $gedungs = Gedung::all();
+        return view('user.create', compact('gedungs'));
     }
 
     // Menyimpan pengguna baru
@@ -28,14 +30,16 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
-            'role' => 'required|in:user,admin', // Validasi role
+            'role' => 'required|in:user,spv,teknisi',
+            'gedung_id' => 'required',
         ]);
 
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = Hash::make($request->password); // Menggunakan hash untuk password
-        $user->role = $request->role; // Menyimpan role
+        $user->password = Hash::make($request->password);
+        $user->role = $request->role;
+        $user->gedung_id = $request->gedung_id;
         $user->save();
 
         return redirect()->route('user.index')->with('success', 'User berhasil dibuat');
@@ -45,7 +49,8 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('user.edit', compact('user'));
+        $gedungs = Gedung::all();
+        return view('user.edit', compact('user', 'gedungs'));
     }
 
     // Memperbarui data pengguna
@@ -54,17 +59,19 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
-            'password' => 'nullable|string|min:6|confirmed', // Password bisa null jika tidak diubah
-            'role' => 'required|in:user,admin', // Validasi role
+            'password' => 'nullable|string|min:6|confirmed',
+            'role' => 'required|in:user,spv,teknisi',
+            'gedung_id' => 'required|exists:gedungs,id',
         ]);
 
         $user = User::findOrFail($id);
         $user->name = $request->name;
         $user->email = $request->email;
         if ($request->password) {
-            $user->password = Hash::make($request->password); // Update password jika ada
+            $user->password = Hash::make($request->password);
         }
-        $user->role = $request->role; // Memperbarui role
+        $user->role = $request->role;
+        $user->gedung_id = $request->gedung_id;
         $user->save();
 
         return redirect()->route('user.index')->with('success', 'User berhasil diperbarui');

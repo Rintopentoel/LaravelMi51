@@ -36,14 +36,31 @@
         <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
     </div>
 
-    <!-- Menambahkan bagian Role -->
+    <!-- Bagian Role -->
     <div class="form-group">
         <label for="role">Role</label>
         <select name="role" id="role" class="form-control" required>
             <option value="user" {{ $user->role === 'user' ? 'selected' : '' }}>User</option>
-            <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
+            <option value="spv" {{ $user->role === 'spv' ? 'selected' : '' }}>SPV</option>
+            <option value="teknisi" {{ $user->role === 'teknisi' ? 'selected' : '' }}>Teknisi</option>
         </select>
         @error('role')
+            <div class="alert alert-danger">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <!-- Bagian Gedung -->
+    <div class="form-group">
+        <label for="gedung_id">Nama Gedung</label>
+        <select name="gedung_id" id="gedung_id" class="form-control" required>
+            <option value="">-- Pilih Gedung --</option>
+            @foreach($gedungs as $gedung)
+                <option value="{{ $gedung->id }}" {{ $user->gedung_id == $gedung->id ? 'selected' : '' }}>
+                    {{ $gedung->nama_gedung }}
+                </option>
+            @endforeach
+        </select>
+        @error('gedung_id')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
     </div>

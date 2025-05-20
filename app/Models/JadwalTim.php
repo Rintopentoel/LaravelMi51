@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class JadwalTim extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['permintaan_id', 'user_id'];
+
+    public function permintaan()
+    {
+        return $this->belongsTo(Permintaan::class, 'permintaan_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

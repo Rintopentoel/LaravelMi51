@@ -16,6 +16,7 @@
             <th>Nama</th>
             <th>Email</th>
             <th>Role</th>
+            <th>Nama Gedung</th>
             <th>Aksi</th>
         </tr>
     </thead>
@@ -25,6 +26,7 @@
             <td>{{ $user->name }}</td>
             <td>{{ $user->email }}</td>
             <td>{{ $user->role }}</td>
+            <td>{{ $user->gedung ? $user->gedung->nama_gedung : '-' }}</td>
             <td>
                 <a href="{{ route('user.edit', $user->id) }}" class="btn btn-warning">Ubah</a>
                 <form action="{{ route('user.destroy', $user->id) }}" method="POST" style="display:inline;">
