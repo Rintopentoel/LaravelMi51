@@ -11,7 +11,7 @@ class DashboardController extends Controller
 {
     public function index() {
         // total gedung
-        $gedung = Gedung::all();
+        $gedung = Gedung::with(['permintaan'])->get();
         // total permintaan
         $permintaan = Permintaan::all();
         // jumlah permintaan per bulan
@@ -26,9 +26,29 @@ class DashboardController extends Controller
         ORDER BY 
             YEAR(tanggal), MONTH(tanggal);");
 
+        // jumlah permintaan berdasarkan status
+        $jumlahBelum = Permintaan::where('status', 'belum')->count();
+        $jumlahProses = Permintaan::where('status', 'proses')->count();
+        $jumlahSelesai = Permintaan::where('status', 'selesai')->count();
+
+        // Data untuk grafik: permintaan per status per gedung
+        $grafik = [];
+        foreach ($gedung as $g) {
+            $grafik[] = [
+                'nama_gedung' => $g->nama_gedung,
+                'belum' => $g->permintaan->where('status', 'belum')->count(),
+                'proses' => $g->permintaan->where('status', 'proses')->count(),
+                'selesai' => $g->permintaan->where('status', 'selesai')->count(),
+            ];
+        }
+
         return view('dashboard-new')
             ->with('gedung', $gedung)
             ->with('permintaan', $permintaan)
-            ->with('jumlahPermintaan', $jumlahPermintaan);
+            ->with('jumlahPermintaan', $jumlahPermintaan)
+            ->with('jumlahBelum', $jumlahBelum)
+            ->with('jumlahProses', $jumlahProses)
+            ->with('jumlahSelesai', $jumlahSelesai)
+            ->with('grafik', $grafik);
     }
 }

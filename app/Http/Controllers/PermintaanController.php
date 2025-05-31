@@ -14,9 +14,32 @@ class PermintaanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $hasil = Permintaan::all();
+        $query = Permintaan::query();
+
+        // Filter tanggal mulai
+        if ($request->filled('tanggal_mulai')) {
+            $query->where('tanggal', '>=', $request->tanggal_mulai);
+        }
+
+        // Filter tanggal sampai
+        if ($request->filled('tanggal_sampai')) {
+            $query->where('tanggal', '<=', $request->tanggal_sampai);
+        }
+
+        // Filter lokasi gedung
+        if ($request->filled('lokasi')) {
+            $query->where('gedung_id', $request->lokasi);
+        }
+
+        // Filter status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $hasil = $query->get();
+
         return view('permintaan.index')->with('hasil', $hasil);
     }
 
@@ -51,7 +74,19 @@ class PermintaanController extends Controller
             $input['foto'] = $fileName;
         }
 
-        Permintaan::create($input);
+        $permintaan = Permintaan::create($input);
+
+        // Kirim email ke semua user dengan role spv
+        $spvs = \App\Models\User::where('role', 'spv')->get();
+        foreach ($spvs as $spv) {
+            \Mail::raw(
+                "Permintaan baru telah dibuat oleh " . Auth::user()->name . ":\n\nDeskripsi: " . $permintaan->deskripsi . "\nGedung: " . ($permintaan->gedung ? $permintaan->gedung->nama_gedung : '-') . "\nTanggal: " . $permintaan->tanggal,
+                function ($message) use ($spv) {
+                    $message->to($spv->email)
+                            ->subject('Permintaan Baru Diajukan');
+                }
+            );
+        }
 
         return redirect()->route('permintaan.index');
     }
@@ -102,19 +137,31 @@ class PermintaanController extends Controller
         }
 
         $hasil = Permintaan::find($permintaan);
+        $statusLama = $hasil->status;
         $hasil->update($input);
 
         // Update tim teknisi pada tabel jadwal_tims
-        // Hapus dulu semua teknisi yang lama
         \App\Models\JadwalTim::where('permintaan_id', $hasil->id)->delete();
-
-        // Tambahkan teknisi yang baru dipilih
         if ($request->filled('teknisi_ids')) {
             foreach ($request->teknisi_ids as $teknisi_id) {
                 \App\Models\JadwalTim::create([
                     'permintaan_id' => $hasil->id,
                     'user_id' => $teknisi_id,
                 ]);
+            }
+        }
+
+        // Jika status diubah dari selain 'proses' menjadi 'proses', kirim email ke teknisi yang ditugaskan
+        if ($statusLama !== 'proses' && $input['status'] === 'proses' && $request->filled('teknisi_ids')) {
+            $teknisis = \App\Models\User::whereIn('id', $request->teknisi_ids)->get();
+            foreach ($teknisis as $teknisi) {
+                \Mail::raw(
+                    "Anda telah ditugaskan untuk permintaan servis berikut:\n\nDeskripsi: " . $hasil->deskripsi . "\nGedung: " . ($hasil->gedung ? $hasil->gedung->nama_gedung : '-') . "\nTanggal: " . $hasil->tanggal,
+                    function ($message) use ($teknisi) {
+                        $message->to($teknisi->email)
+                                ->subject('Tugas Permintaan Servis Baru');
+                    }
+                );
             }
         }
 
